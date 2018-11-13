@@ -4,9 +4,9 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ## Step1: Create a nl obejct:
-nl <- nl(nlversion = "6.0.3",
-         nlpath = "/home/uni08/jsaleck/NetLogo_6.0.3/",
-         modelpath = "/home/uni08/jsaleck/NetLogo_6.0.3/app/models/wolfsheepnlrx/Wolf Sheep Predation_nlrx.nlogo",
+nl <- nl(nlversion = "6.0.4",
+         nlpath = "1_Helper/NetLogo 6.0.4/",
+         modelpath = "1_Helper/NetLogo 6.0.4/app/models/wolfsheepnlrx/Wolf Sheep Predation_nlrx.nlogo",
          jvmmem = 1024)
 
 ## Step2: Add Experiment
@@ -15,8 +15,8 @@ nl <- nl(nlversion = "6.0.3",
 load_model_parameters(nl)
 eval_variables_constants(nl)
 
-nl@experiment <- experiment(expname = "nlrx_examples",
-                            outpath = "C:/Users/Jan/ownCloud/Rdev/nlrx_manuscript/nlrx_paper_analysis/output",
+nl@experiment <- experiment(expname = "eFast",
+                            outpath = "3_Results/",
                             repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
                             tickmetrics = "true",
                             idsetup = "setup",   # you can define multiple setup procedures with c()
@@ -56,9 +56,8 @@ results %<-% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
 setsim(nl, "simoutput") <- results
 
 # Store nl object
-saveRDS(nl, paste0(getwd(), "/output/wolfsheep_eFast_nl.rds"))
+saveRDS(nl, paste0(getwd(), "3_Results/wolfsheep_eFast_nl.rds"))
 
-#nl <- readRDS(paste0(getwd(), "/output/wolfsheep_eFast_nl.rds"))
 # Get morris indices:
 eFast.out <- analyze_nl(nl)
 
@@ -89,7 +88,7 @@ ggplot(data=eFast.short) +
         legend.position="top")
 
 
-ggsave(paste0("wolfsheep_eFast.png"), path=paste0(getwd(), "/output/"), width = 12.0, height = 10.0, dpi=300)
+ggsave(paste0("4_Plots/wolfsheep_eFast.png"), path=paste0(getwd(), "/output/"), width = 12.0, height = 10.0, dpi=300)
 
 
 

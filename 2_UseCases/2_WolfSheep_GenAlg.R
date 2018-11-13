@@ -5,15 +5,15 @@
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 ## Step1: Create a nl obejct:
-nl <- nl(nlversion = "6.0.3",
-         nlpath = "C:/Program Files/NetLogo 6.0.3/",
-         modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/wolfsheepnlrx/Wolf Sheep Predation_nlrx.nlogo",
+nl <- nl(nlversion = "6.0.4",
+         nlpath = "1_Helper/NetLogo 6.0.4/",
+         modelpath = "1_Helper/NetLogo 6.0.4/app/models/wolfsheepnlrx/Wolf Sheep Predation_nlrx.nlogo",
          jvmmem = 1024)
 
 ## Step2: Add Experiment
 
-nl@experiment <- experiment(expname = "nlrx_examples",
-                            outpath = "C:/Users/Jan/ownCloud/Rdev/nlrx_manuscript/nlrx_paper_analysis/output",
+nl@experiment <- experiment(expname = "GenAlg",
+                            outpath = "3_Results/",
                             repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
                             tickmetrics = "true",
                             idsetup = "setup",   # you can define multiple setup procedures with c()
@@ -52,9 +52,9 @@ results <- run_nl_dyn(nl = nl,
 
 # Attach results to nl
 setsim(nl, "simoutput") <- results
-# Store nl object
-saveRDS(nl, paste0(getwd(), "/output/wolfsheep_genAlg_nl.rds"))
 
+# Store nl object
+saveRDS(nl, paste0(getwd(), "3_Results/wolfsheep_genAlg_nl.rds"))
 
 #### Plot 1: Fitness function:
 fitness <- data.frame(generation=seq(1:length(results$mean)), evaluation=results$mean)
@@ -77,14 +77,13 @@ fitness.best <- data.frame(parameter=c("initial-number-sheep", "initial-number-w
 fitness.best.table <- tableGrob(fitness.best, rows=rep("",nrow(fitness.best)))
 
 ## Use best found setting to simulate one run of wolf sheep over 2000 ticks:
-
-nl <- nl(nlversion = "6.0.3",
-         nlpath = "C:/Program Files/NetLogo 6.0.3/",
-         modelpath = "C:/Program Files/NetLogo 6.0.3/app/models/wolfsheepnlrx/Wolf Sheep Predation_nlrx.nlogo",
+nl <- nl(nlversion = "6.0.4",
+         nlpath = "1_Helper/NetLogo 6.0.4/",
+         modelpath = "1_Helper/NetLogo 6.0.4/app/models/wolfsheepnlrx/Wolf Sheep Predation_nlrx.nlogo",
          jvmmem = 1024)
 
-nl@experiment <- experiment(expname = "nlrx_examples",
-                            outpath = "C:/Users/Jan/ownCloud/Rdev/nlrx_manuscript/nlrx_paper_analysis/output",
+nl@experiment <- experiment(expname = "GenAlg",
+                            outpath = "3_Results/",
                             repetition = 1,      # If repetitions is > 1, a different random seed will be set for each netlogo run
                             tickmetrics = "true",
                             idsetup = "setup",   # you can define multiple setup procedures with c()
@@ -122,11 +121,9 @@ individuals.plot <- ggplot(results.best, aes(x=`[step]`)) +
   theme(axis.text=element_text(size=14),
         axis.title=element_text(size=14))
 
-library(gridExtra)
-
 plots <- list(fitness.plot, individuals.plot, fitness.best.table)
 lay <- rbind(c(1, 3), c(2)) 
 grid.arrange(grobs=plots, layout_matrix=lay)
-ggsave("output/wolfsheep_genalg.png", width=10, height=5, arrangeGrob(grobs=plots, layout_matrix=lay))  
+ggsave("4_Plots/wolfsheep_genalg.png", width=10, height=5, arrangeGrob(grobs=plots, layout_matrix=lay))  
 
 
