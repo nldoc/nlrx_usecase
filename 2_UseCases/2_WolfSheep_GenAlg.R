@@ -7,7 +7,7 @@
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
          nlpath = "1_Helper/NetLogo 6.0.4/",
-         modelpath = "1_Helper/NetLogo 6.0.4/app/models/wolfsheepnlrx/Wolf Sheep Predation_nlrx.nlogo",
+         modelpath = "1_Helper/Wolf Sheep Predation_nlrx.nlogo",
          jvmmem = 1024)
 
 ## Step2: Add Experiment
@@ -31,13 +31,12 @@ nl@experiment <- experiment(expname = "GenAlg",
                                              "wolf-reproduce" = list(min=0, max=20, step=5, qfun="qunif")
                             ),
                             constants = list("model-version" = "\"sheep-wolves-grass\"",
-                                             "show-energy?" = "false")
-)
+                                             "show-energy?" = "false"))
 
 
 nl@simdesign <- simdesign_GenAlg(nl = nl,
-                                 popSize = 100,
-                                 iters = 10,
+                                 popSize = 100, 
+                                 iters = 10, 
                                  evalcrit = 1,
                                  elitism = NA,
                                  mutationChance = NA,
@@ -54,7 +53,7 @@ results <- run_nl_dyn(nl = nl,
 setsim(nl, "simoutput") <- results
 
 # Store nl object
-saveRDS(nl, paste0(getwd(), "3_Results/wolfsheep_genAlg_nl.rds"))
+saveRDS(nl, paste0(getwd(), "/3_Results/wolfsheep_genAlg_nl.rds"))
 
 #### Plot 1: Fitness function:
 fitness <- data.frame(generation=seq(1:length(results$mean)), evaluation=results$mean)
@@ -79,7 +78,7 @@ fitness.best.table <- tableGrob(fitness.best, rows=rep("",nrow(fitness.best)))
 ## Use best found setting to simulate one run of wolf sheep over 2000 ticks:
 nl <- nl(nlversion = "6.0.4",
          nlpath = "1_Helper/NetLogo 6.0.4/",
-         modelpath = "1_Helper/NetLogo 6.0.4/app/models/wolfsheepnlrx/Wolf Sheep Predation_nlrx.nlogo",
+         modelpath = "1_Helper/Wolf Sheep Predation_nlrx.nlogo",
          jvmmem = 1024)
 
 nl@experiment <- experiment(expname = "GenAlg",
@@ -124,6 +123,7 @@ individuals.plot <- ggplot(results.best, aes(x=`[step]`)) +
 plots <- list(fitness.plot, individuals.plot, fitness.best.table)
 lay <- rbind(c(1, 3), c(2)) 
 grid.arrange(grobs=plots, layout_matrix=lay)
+
 ggsave("4_Plots/wolfsheep_genalg.png", width=10, height=5, arrangeGrob(grobs=plots, layout_matrix=lay))  
 
 

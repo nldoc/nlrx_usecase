@@ -2,7 +2,7 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Simulation 1: eFAST
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
          nlpath = "1_Helper/NetLogo 6.0.4/",
@@ -36,6 +36,7 @@ nl@experiment <- experiment(expname = "eFast",
                             constants = list("model-version" = "\"sheep-wolves-grass\"",
                                              "show-energy?" = "false")
 )
+
 nl@simdesign <- simdesign_eFast(nl=nl,
                                 samples=1000,
                                 nseeds=5)
