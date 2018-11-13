@@ -10,6 +10,7 @@ library(ggrepel)
 library(ggthemes)
 library(RColorBrewer)
 library(gridExtra)
+library(hrbrthemes)
 
 # Global variables
 fontsize <- 12

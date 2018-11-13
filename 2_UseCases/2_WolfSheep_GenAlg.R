@@ -62,7 +62,8 @@ fitness.plot <- ggplot(fitness, aes(x=generation, y=evaluation)) +
   geom_line(size=1) +
   theme_minimal() +
   theme(axis.text=element_text(size=14),
-        axis.title=element_text(size=14))
+        axis.title=element_text(size=14)) + 
+  theme_ipsum(axis_title_size = 14)
 
 results.summary <- summary(results)
 # Best Solution : 122.445671865717 135.564143280499 4.72592818550766 1.47040947340429 32.7673053834587 14.9240314308554 19.3318424234167 \n"
@@ -118,7 +119,8 @@ individuals.plot <- ggplot(results.best, aes(x=`[step]`)) +
   ylab("individuals") +
   theme_minimal() +
   theme(axis.text=element_text(size=14),
-        axis.title=element_text(size=14))
+        axis.title=element_text(size=14))+ 
+  theme_ipsum(axis_title_size = 14)
 
 plots <- list(fitness.plot, individuals.plot, fitness.best.table)
 lay <- rbind(c(1, 3), c(2)) 
