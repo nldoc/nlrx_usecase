@@ -1,4 +1,3 @@
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Simulation 1: eFAST
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -6,7 +5,7 @@
 ## Step1: Create a nl obejct:
 nl <- nl(nlversion = "6.0.4",
          nlpath = "1_Helper/NetLogo 6.0.4/",
-         modelpath = "1_Helper/NetLogo 6.0.4/app/models/wolfsheepnlrx/Wolf Sheep Predation_nlrx.nlogo",
+         modelpath = "1_Helper/Wolf Sheep Predation_nlrx.nlogo",
          jvmmem = 1024)
 
 ## Step2: Add Experiment
@@ -41,23 +40,17 @@ nl@simdesign <- simdesign_eFast(nl=nl,
                                 samples=1000,
                                 nseeds=5)
 
-## Run on HPC
-results %<-% furrr::future_map_dfr(getsim(nl, "simseeds"), function(seed){
-  furrr::future_map_dfr(seq_len(nrow(getsim(nl, "siminput"))), function(siminputrow) {
-    
-    run_nl(nl = nl,
-           seed = seed,
-           siminputrow = siminputrow,
-           cleanup = "all")
-  })
-})
-
+## Run parallel
+plan(multisession)
+results <- nlrx::run_nl_all(nl = nl,
+                            split = 1,
+                            cleanup = "all")
 
 # Attach results to nl
 setsim(nl, "simoutput") <- results
 
 # Store nl object
-saveRDS(nl, paste0(getwd(), "3_Results/wolfsheep_eFast_nl.rds"))
+saveRDS(nl, "3_Results/wolfsheep_eFast_nl.rds")
 
 # Get morris indices:
 eFast.out <- analyze_nl(nl)
@@ -86,10 +79,11 @@ ggplot(data=eFast.short) +
   theme(strip.text=element_text(size=fontsize),
         axis.text=element_text(size=fontsize),
         axis.title=element_text(size=fontsize),
-        legend.position="top")
+        legend.position="top")+ 
+  theme_ipsum(axis_title_size = 14)
 
 
-ggsave(paste0("4_Plots/wolfsheep_eFast.png"), path=paste0(getwd(), "/output/"), width = 12.0, height = 10.0, dpi=300)
+ggsave("4_Plots/wolfsheep_eFast.png", width = 12.0, height = 10.0, dpi=300)
 
 
 
