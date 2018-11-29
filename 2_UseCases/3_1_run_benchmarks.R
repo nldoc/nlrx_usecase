@@ -7,9 +7,9 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 # Prerequirements, both approaches:
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-library(future)
-# Initialize tibble to collect RAM demand data:
-mem <- tibble::tibble()
+#
+# TODO: Define sysname
+sysname <- "desktop_jan"
 
 # Define number of seeds, runs and runtime:
 nseeds <- 8
@@ -20,9 +20,30 @@ modelpath <- "C:/Program Files/NetLogo 6.0.4/app/models/Wolf Sheep Predation_nlr
 javapath <- "C:/Program Files/Java/jdk1.8.0_171"
 jvmmem <- 4  ##gb
 
+# Initialize tibble to collect RAM demand data:
+mem <- tibble::tibble()
+
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# nlrx:
+# Store system Information:
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+library(devtools)
+library(benchmarkme)
+sink(paste0("3_Results/benchmark/nlrx_benchmark_", sysname, ".txt"))
+devtools::session_info()
+cat("\n")
+cat("- CPU -----------------------------------------------------------------------------\n")
+cat(paste0(names(benchmarkme::get_cpu()[1]), ": ", benchmarkme::get_cpu()[1]), "\n")
+cat(paste0(names(benchmarkme::get_cpu()[2]), ": ", benchmarkme::get_cpu()[2]), "\n")
+cat(paste0(names(benchmarkme::get_cpu()[3]), ": ", benchmarkme::get_cpu()[3]), "\n")
+cat("\n")
+cat("- RAM -----------------------------------------------------------------------------\n")
+cat(paste0("System RAM: ", utils:::format.object_size(benchmarkme::get_ram(), units="GB"), "\n"))
+sink()
+
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+# Run nlrx benchmark:
+#~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+library(future)
 library(nlrx)
 
 nl <- nl(nlversion = "6.0.4",
@@ -68,9 +89,8 @@ mem <- mem %>% dplyr::bind_rows(tibble::tibble(pkg="nlrx", pos=2, time=Sys.time(
 gc()
 mem <- mem %>% dplyr::bind_rows(tibble::tibble(pkg="nlrx", pos=3, time=Sys.time(), mem=as.numeric(gsub("\r","",gsub("FreePhysicalMemory=","",system('wmic OS get FreePhysicalMemory /Value',intern=TRUE)[3])))/1024/1024))
 
-
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# RNetLogo
+# Run RNetLogo benchmark:
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Sys.setenv(JAVA_HOME=javapath) 
@@ -175,61 +195,10 @@ mem <- mem %>% dplyr::bind_rows(tibble::tibble(pkg="RNetLogo", pos=3, time=Sys.t
 
 
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Data postprocessing
+# Store benchmark results:
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-# Store rawdata:
-saveRDS(mem, "3_Results/nlrx_benchmark_memory.rds")
-
-## Pkgs:
-library(tidyverse)
-library(ggthemes)
-## Add names for measurement positions:
-mem$posname <- ifelse(mem$pos == 1, "Start", ifelse(mem$pos == 2, "Final", "After gc"))
-mem$posname <- factor(mem$posname, levels = c("Start", "Final", "After gc"))
-
-## Calculate time demand:
-time <- mem %>% 
-  group_by(pkg) %>% 
-  filter(pos==max(pos) | pos==min(pos)) %>% 
-  mutate(diff = time - lag(time, default = first(time))) %>% 
-  dplyr::filter(diff > 0) %>% 
-  dplyr::select(pkg, diff)
-
-# Plot time:
-ggplot(time, aes(x=pkg, y=diff, fill=pkg)) +
-  geom_bar(stat="identity") +
-  scale_y_time() +
-  scale_fill_solarized() +
-  guides(fill="none") +
-  xlab("R package") +
-  ylab("Execution time") +
-  theme_classic() +
-  theme(axis.text = element_text(size=14, color="black"),
-        axis.title = element_text(size=14, color="black"))
-
-ggsave("4_Plots/nlrx_benchmarks_time.png", width=4, height=4)
-
-
-# Postpro memory:
-basemem <- mem %>% filter(pos==1)
-memplot <- mem 
-memplot$basemem <- rep(basemem$mem, each=3) 
-memplot <- memplot %>% mutate(memdiff = mem - basemem)
-memplot$pkglabel <- ifelse(memplot$pos==3, memplot$pkg, "")
-
-# Plot Memory:
-ggplot(memplot, aes(x=posname, y=memdiff, color=pkg, group=pkg)) +
-  geom_point(stat='summary', fun.y=sum, size=5) +
-  stat_summary(fun.y=sum, geom="line", size=2) +
-  geom_text(aes(label=pkglabel), nudge_y=0.3, size=5) +
-  ylab("Free Physical Memory [GB]") +
-  xlab("Measurement position") +
-  scale_color_solarized() +  
-  guides(color="none") +
-  theme_classic() +
-  theme(axis.text = element_text(size=14, color="black"),
-        axis.title = element_text(size=14, color="black"))
-
-ggsave("4_Plots/nlrx_benchmarks_memory.png", width=6, height=4, dpi=300)
+# Add sysname to mem for reference:
+mem$sysname <- sysname
+saveRDS(mem, paste0("3_Results/benchmark/nlrx_benchmark_", sysname, ".rds"))
 
 
