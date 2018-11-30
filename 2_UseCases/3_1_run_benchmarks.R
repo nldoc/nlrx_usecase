@@ -104,9 +104,9 @@ prepro <- function(gui, nl.path, model.path) {
 postpro <- function() {
   NLQuit()
 }
-simfun <- function(nl, seed, siminputrow) {
+simfun <- function(nl, nlpath, modelpath, seed, siminputrow) {
   
-  prepro(gui=FALSE, nl.path="C:/Program Files/NetLogo 6.0.4/app", model.path="C:/Program Files/NetLogo 6.0.4/app/models/Wolf Sheep Predation_nlrx.nlogo")
+  prepro(gui=FALSE, nl.path=file.path(nl@nlpath, "app"), model.path=nl@modelpath)
   model.seed <- seed
   parameter.names <- names(nl@simdesign@siminput)
   param.set <- nl@simdesign@siminput[siminputrow,]
