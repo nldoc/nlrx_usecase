@@ -10,15 +10,22 @@
 #
 # TODO: Define sysname
 sysname <- "desktop_jan"
+sysname <- "laptop_linux_marco"
 
 # Define number of seeds, runs and runtime:
 nseeds <- 8
 runtime <- 500
 samples <- 100
+
 nlpath <- "C:/Program Files/NetLogo 6.0.4"
 modelpath <- "C:/Program Files/NetLogo 6.0.4/app/models/Wolf Sheep Predation_nlrx.nlogo"
 javapath <- "C:/Program Files/Java/jdk1.8.0_171"
 jvmmem <- 4  ##gb
+
+nlpath    <- "1_Helper/NetLogo 6.0.4/"
+modelpath <- "1_Helper/Wolf Sheep Predation_nlrx.nlogo"
+javapath  <- "/usr/lib/jvm/java-11-openjdk-amd64/bin"
+jvmmem    <- 4 
 
 # Initialize tibble to collect RAM demand data:
 mem <- tibble::tibble()
