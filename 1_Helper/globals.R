@@ -11,6 +11,9 @@ library(ggthemes)
 library(RColorBrewer)
 library(gridExtra)
 library(hrbrthemes)
+library(raster)
+library(landscapemetrics)
+library(landscapetools)
 
 # Global variables
 fontsize <- 12
