@@ -14,6 +14,17 @@ nldoc(modelfiles = modelfiles,
       date = date(),
       toc = TRUE)
 
+nldoc(modelfiles = modelfiles,
+      infotab=TRUE,
+      gui=TRUE,
+      bs=TRUE,
+      outpath = outpath,
+      output_format = "pdf",
+      number_sections = TRUE,
+      theme = "cosmo",
+      date = date(),
+      toc = TRUE)
+
 nw <- nldoc_network(modelfiles = modelfiles)
 
 # Determine communities within the network and plot using Igraph package:
