@@ -1,12 +1,10 @@
 ---
 title: "Wolf Sheep Predation (NetLogo models library)"
 author: "Uri Wilenski"
-date: "Thu Mar 07 08:15:29 2019"
+date: "Thu Mar 07 11:13:58 2019"
 output: 
-  html_document:
+  pdf_document:
     toc: TRUE
-    number_sections: TRUE
-    theme: cosmo
 ---
 
 # Global
