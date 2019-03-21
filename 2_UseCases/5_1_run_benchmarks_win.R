@@ -9,22 +9,16 @@
 #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #
 # TODO: Define sysname
-sysname <- "desktop_jan"
-sysname <- "laptop_linux_marco"
+sysname <- "T460"
 
 # Define number of seeds, runs and runtime:
 nseeds <- 8
 runtime <- 500
 samples <- 100
 
-nlpath <- "C:/Program Files/NetLogo 6.0.4"
-modelpath <- "C:/Program Files/NetLogo 6.0.4/app/models/Wolf Sheep Predation_nlrx.nlogo"
-javapath <- "C:/Program Files/Java/jdk1.8.0_171"
-jvmmem <- 4  ##gb
-
-nlpath    <- "1_Helper/NetLogo 6.0.4/"
-modelpath <- "1_Helper/Wolf Sheep Predation_nlrx.nlogo"
-javapath  <- "/usr/lib/jvm/java-11-openjdk-amd64/bin"
+nlpath    <- file.path(getwd(), "1_Helper/NetLogo 6.0.4/")
+modelpath <- file.path(getwd(), "1_Helper/Wolf Sheep Predation_nlrx.nlogo")
+javapath <- "C:/Program Files/Java/jdk1.8.0_144"
 jvmmem    <- 4 
 
 # Initialize tibble to collect RAM demand data:
@@ -89,9 +83,7 @@ plan(sequential)
 plan(multiprocess)
 gc()
 mem <- mem %>% dplyr::bind_rows(tibble::tibble(pkg="nlrx", pos=1, time=Sys.time(), mem=as.numeric(gsub("\r","",gsub("FreePhysicalMemory=","",system('wmic OS get FreePhysicalMemory /Value',intern=TRUE)[3])))/1024/1024))
-results <- nlrx::run_nl_all(nl = nl,
-                            split = 1,
-                            cleanup = "all")
+results <- nlrx::run_nl_all(nl = nl)
 mem <- mem %>% dplyr::bind_rows(tibble::tibble(pkg="nlrx", pos=2, time=Sys.time(), mem=as.numeric(gsub("\r","",gsub("FreePhysicalMemory=","",system('wmic OS get FreePhysicalMemory /Value',intern=TRUE)[3])))/1024/1024))
 gc()
 mem <- mem %>% dplyr::bind_rows(tibble::tibble(pkg="nlrx", pos=3, time=Sys.time(), mem=as.numeric(gsub("\r","",gsub("FreePhysicalMemory=","",system('wmic OS get FreePhysicalMemory /Value',intern=TRUE)[3])))/1024/1024))
