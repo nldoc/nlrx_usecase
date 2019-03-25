@@ -97,6 +97,9 @@ img {
 button.code-folding-btn:focus {
   outline: none;
 }
+summary {
+  display: list-item;
+}
 </style>
 
 
@@ -104,14 +107,74 @@ button.code-folding-btn:focus {
 <div class="container-fluid main-container">
 
 <!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
 <script>
 $(document).ready(function () {
   window.buildTabsets("TOC");
 });
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
 </script>
 
 <!-- code folding -->
-
 
 
 
@@ -123,7 +186,7 @@ $(document).ready(function () {
 
 <h1 class="title toc-ignore">Wolf Sheep Predation (NetLogo models library)</h1>
 <h4 class="author"><em>Uri Wilenski</em></h4>
-<h4 class="date"><em>Thu Mar 07 08:15:29 2019</em></h4>
+<h4 class="date"><em>Mon Mar 25 10:49:42 2019</em></h4>
 
 </div>
 
@@ -177,7 +240,7 @@ $(document).ready(function () {
 <h2><span class="header-section-number">1.1</span> Subfiles</h2>
 <div id="description" class="section level4 unnumbered">
 <h4>Description</h4>
-<p>We included a subilfe to the wolf sheep model to demonstrate that nls files are supported by nldoc</p>
+<p>A subfile to the wolf sheep model is included. </br>This demonstrates that nls files are supported by nldoc.</p>
 <pre><code>
 __includes[&quot;Wolf Sheep Predation Extra.nls&quot;]
 </code></pre>
@@ -208,9 +271,9 @@ breed [ wolves wolf ]
 <h2><span class="header-section-number">1.4</span> Agent properties</h2>
 <div id="description-3" class="section level4 unnumbered">
 <h4>Description</h4>
-<p>Sheep and wolves have a energy variable. Patches have a countdown variable to store the current state of the grass regrowth countdown.</p>
+<p>Sheep and wolves have a energy variable. </br>Patches have a countdown variable to store the current state of the grass regrowth countdown.</p>
 <pre><code>
-turtles-own [ energy ]       ; both wolves and sheep have energy
+turtles-own [ energy ]       ; both wolves and sheep have an energy
 patches-own [ countdown ]
 </code></pre>
 </div>
@@ -222,14 +285,14 @@ patches-own [ countdown ]
 <h2><span class="header-section-number">2.1</span> Setup</h2>
 <div id="description-4" class="section level4 unnumbered">
 <h4>Description</h4>
-<p>The setup procedure first resets the model.</br>Depending on the chosen model version, grass patches are initialized.</br>Finally, wolves and sheep are created.</p>
+<p>The setup procedure first resets the model. </br>Depending on the chosen model version, grass patches are initialized. </br>Finally, wolves and sheep are created.</p>
 </div>
 </div>
 <div id="go" class="section level2">
 <h2><span class="header-section-number">2.2</span> Go</h2>
 <div id="description-5" class="section level4 unnumbered">
 <h4>Description</h4>
-<p>This is the main procedure of the model.</br>It iterates over sheep and wolve agents.</br>These agents then move, forage and die if they dont have enough energy.</p>
+<p>This is the main procedure of the model. </br>It iterates over sheep and wolve agents. </br>These agents then move, forage and die if they dont have enough energy.</p>
 </div>
 </div>
 <div id="move" class="section level2">
@@ -264,7 +327,7 @@ end</code></pre>
 <h2><span class="header-section-number">2.5</span> reproduce-sheep</h2>
 <div id="description-8" class="section level4 unnumbered">
 <h4>Description</h4>
-<p>Under a defined probability, a sheep may hatch a new offspring and looses 50% of its energy.</p>
+<p>Under a defined probability, a sheep may hatch a new offspring and loses 50% of its energy.</p>
 <pre><code>
 to reproduce-sheep  ; sheep procedure
   if random-float 100 &lt; sheep-reproduce [  ; throw &quot;dice&quot; to see if you will reproduce
@@ -278,7 +341,7 @@ end</code></pre>
 <h2><span class="header-section-number">2.6</span> reproduce-wolves</h2>
 <div id="description-9" class="section level4 unnumbered">
 <h4>Description</h4>
-<p>Under a defined probability, a wolf may hatch a new offspring and looses 50% of its energy.</p>
+<p>Under a defined probability, a wolf may hatch a new offspring and loses 50% of its energy.</p>
 <pre><code>
 to reproduce-wolves  ; wolf procedure
   if random-float 100 &lt; wolf-reproduce [  ; throw &quot;dice&quot; to see if you will reproduce
@@ -307,7 +370,7 @@ end</code></pre>
 <h2><span class="header-section-number">2.8</span> death</h2>
 <div id="description-11" class="section level4 unnumbered">
 <h4>Description</h4>
-<p>If a turtle looses all of its energy it dies.</p>
+<p>If a turtle loses all of its energy it dies.</p>
 <pre><code>
 to death  ; turtle procedure (i.e. both wolf nd sheep procedure)
   ; when energy dips below zero, die
@@ -403,7 +466,7 @@ end</code></pre>
 </div>
 <div id="description-17" class="section level4 unnumbered">
 <h4>Description</h4>
-<p>This function calculates the sum of two privded numbers</p>
+<p>This function calculates the sum of two provided numbers</p>
 <pre><code>
 to-report calc-sum [a b]
   report (a + b)

@@ -67,4 +67,4 @@ model_name: Intel(R) Core(TM) i5-4570 CPU @ 3.20GHz
 no_of_cores: 4 
 
 - RAM -----------------------------------------------------------------------------
-System RAM: NA Gb
+System RAM: 16 Gb

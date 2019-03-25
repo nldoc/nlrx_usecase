@@ -1,7 +1,7 @@
 ---
 title: "Wolf Sheep Predation (NetLogo models library)"
 author: "Uri Wilenski"
-date: "Thu Mar 07 11:13:58 2019"
+date: "Mon Mar 25 10:49:43 2019"
 output: 
   pdf_document:
     toc: TRUE
@@ -10,7 +10,7 @@ output:
 # Global
 ## Subfiles
 #### Description {-}
-We included a subilfe to the wolf sheep model to demonstrate that nls files are supported by nldoc
+A subfile to the wolf sheep model is included. </br>This demonstrates that nls files are supported by nldoc.
 ```
 
 __includes["Wolf Sheep Predation Extra.nls"]
@@ -35,22 +35,22 @@ breed [ wolves wolf ]
 ```
 ## Agent properties
 #### Description {-}
-Sheep and wolves have a energy variable. Patches have a countdown variable to store the current state of the grass regrowth countdown.
+Sheep and wolves have a energy variable. </br>Patches have a countdown variable to store the current state of the grass regrowth countdown.
 ```
 
-turtles-own [ energy ]       ; both wolves and sheep have energy
+turtles-own [ energy ]       ; both wolves and sheep have an energy
 patches-own [ countdown ]
 
 ```
 # Procedures
 ## Setup
 #### Description {-}
-The setup procedure first resets the model.</br>Depending on the chosen model version, grass patches are initialized.</br>Finally, wolves and sheep are created.
+The setup procedure first resets the model.  </br>Depending on the chosen model version, grass patches are initialized.  </br>Finally, wolves and sheep are created.
 
 
 ## Go
 #### Description {-}
-This is the main procedure of the model.</br>It iterates over sheep and wolve agents.</br>These agents then move, forage and die if they dont have enough energy.
+This is the main procedure of the model. </br>It iterates over sheep and wolve agents. </br>These agents then move, forage and die if they dont have enough energy.
 
 
 ## Move
@@ -83,7 +83,7 @@ end
 
 ## reproduce-sheep
 #### Description {-}
-Under a defined probability, a sheep may hatch a new offspring and looses 50% of its energy.
+Under a defined probability, a sheep may hatch a new offspring and loses 50% of its energy.
 ```
 
 to reproduce-sheep  ; sheep procedure
@@ -97,7 +97,7 @@ end
 
 ## reproduce-wolves
 #### Description {-}
-Under a defined probability, a wolf may hatch a new offspring and looses 50% of its energy.
+Under a defined probability, a wolf may hatch a new offspring and loses 50% of its energy.
 ```
 
 to reproduce-wolves  ; wolf procedure
@@ -126,7 +126,7 @@ end
 
 ## death
 #### Description {-}
-If a turtle looses all of its energy it dies.
+If a turtle loses all of its energy it dies.
 ```
 
 to death  ; turtle procedure (i.e. both wolf nd sheep procedure)
@@ -223,7 +223,7 @@ sum of a and b
 
 
 #### Description {-}
-This function calculates the sum of two privded numbers
+This function calculates the sum of two provided numbers
 ```
 
 to-report calc-sum [a b]
