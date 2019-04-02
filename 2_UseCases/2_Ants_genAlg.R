@@ -51,17 +51,18 @@ saveRDS(nl, "3_Results/Ants_genAlg_nl.rds")
 pmarg <- 10
 
 #### Plot 1: Fitness function:
-fitness <- data.frame(generation=seq(1:length(results$mean)), evaluation=results$mean)
+fitness <- data.frame(generation=seq(1:length(nl@simdesign@simoutput$mean)), evaluation=nl@simdesign@simoutput$mean)
 
 fitness.plot <- ggplot(fitness, aes(x=generation, y=evaluation)) +
   geom_line(size=1) +
   theme_ipsum(base_size = 14, axis_text_size = 14, axis_title_size = 14, strip_text_size = 14) +
-  theme(plot.margin = margin(t = pmarg, r = pmarg, b = pmarg, l = pmarg, unit = "pt")) 
+  theme(plot.margin = margin(t = pmarg, r = pmarg, b = pmarg, l = pmarg, unit = "pt")) +
+  ylab("evaluation [ticks]")
   
 
 results.summary <- strsplit(summary(results), " ")
 results.summary <- tibble(parameter = names(nl@experiment@variables),
-                          value = round(as.numeric(results.summary[[1]][(length(results.summary[[1]]) - 3):(length(results.summary[[1]]) - 1)]), digits = 2))
+                          value = round(nl@simdesign@simoutput$population[nrow(nl@simdesign@simoutput$population), ]), digits = 2)
 
 
 fitness.best.table <- tableGrob(results.summary, rows=rep("",nrow(results.summary)))
@@ -129,7 +130,7 @@ saveRDS(nl, "3_Results/Ants_genAlg_valid_nl.rds")
 #ggsave("4_Plots/Ants_sobol.png", width = 6.0, height = 4.0, dpi=300)
 
 ### Try alternate plot counting finished runs:
-results.best.agg <- results.best %>% dplyr::select(`random-seed`, nl@experiment@metrics)
+results.best.agg <- nl@simdesign@simoutput %>% dplyr::select(`random-seed`, nl@experiment@metrics)
 names(results.best.agg) <- c("seed", "step", "1", "2", "3")
 results.best.agg <- results.best.agg %>% 
   gather(foodsource, food, -step, -seed) %>% 
@@ -158,7 +159,7 @@ validplot <- ggplot(results.best.agg, aes(x=step, y=runs.finished, color=foodsou
 
 ### Cumulative per seed:
 
-results.best.agg <- results.best %>% dplyr::select(`random-seed`, nl@experiment@metrics)
+results.best.agg <- nl@simdesign@simoutput %>% dplyr::select(`random-seed`, nl@experiment@metrics)
 names(results.best.agg) <- c("seed", "step", "food1", "food2", "food3")
 results.best.agg <- results.best.agg %>% 
   mutate(foodsum=food1 + food2 + food3) %>% 
