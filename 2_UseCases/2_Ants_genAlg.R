@@ -59,10 +59,8 @@ fitness.plot <- ggplot(fitness, aes(x=generation, y=evaluation)) +
   theme(plot.margin = margin(t = pmarg, r = pmarg, b = pmarg, l = pmarg, unit = "pt")) +
   ylab("evaluation [ticks]")
   
-
-results.summary <- strsplit(summary(results), " ")
 results.summary <- tibble(parameter = names(nl@experiment@variables),
-                          value = round(nl@simdesign@simoutput$population[nrow(nl@simdesign@simoutput$population), ]), digits = 2)
+                          value = round(nl@simdesign@simoutput$population[nrow(nl@simdesign@simoutput$population), ], digits = 2))
 
 
 fitness.best.table <- tableGrob(results.summary, rows=rep("",nrow(results.summary)))
