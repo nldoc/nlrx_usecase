@@ -6,7 +6,7 @@ This repository is designed to store scripts linked to the use case section of S
 
 The paper introduces the [nlrx](https://github.com/ropensci/nlrx) package.
 
-### The nlrx R package - Execute NetLogo simulations from R
+### The nlrx R package: A next-generation framework for reproducible NetLogo model analyses
 
 The repository contains the following files:
 - `/1_Helper`
