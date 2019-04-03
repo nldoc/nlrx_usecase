@@ -2,7 +2,7 @@
 
 ** IN THE END WE NEED TO UPDATE THE ZENODO BADGE **
 
-This repository is designed to store scripts linked to the use case section of Salecker et al. (submitted): The nlrx R package - Execute NetLogo simulations from R.
+This repository is designed to store scripts linked to the use case section of Salecker et al. (submitted): The nlrx R package: A next-generation framework for reproducible NetLogo model analyses.
 
 The paper introduces the [nlrx](https://github.com/ropensci/nlrx) package.
 

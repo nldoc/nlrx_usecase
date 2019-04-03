@@ -1,6 +1,7 @@
 ## Create model documentation with nlrx:
-modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation.nlogo",
-                "https://raw.githubusercontent.com/nldoc/nldoc_playground/master/Wolf%20Sheep%20Predation%20Extra.nls")
+modelfiles <- c("https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nlogo",
+                "https://raw.githubusercontent.com/nldoc/nldoc_pg/master/WSP.nls")
+
 outpath <- "5_Documentation"
 
 nldoc(modelfiles = modelfiles,
