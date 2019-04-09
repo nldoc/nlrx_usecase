@@ -41,7 +41,8 @@ pt <- ggplot(time, aes(x=0, y=nlrx_percent)) +
         axis.text.x = element_text(size=14, color="black", family="A"),
         axis.title.x = element_text(size=14, color="black", family="A"),
         strip.text = element_text(size=14, color="black", family="A"),
-        strip.background = element_rect(color="black", fill="gray95"))
+        strip.background = element_rect(color="black", fill="gray95"),
+        plot.margin = margin(0,4,30,2, unit = "pt"))
 
 ggsave(plot=pt, "4_Plots/nlrx_benchmarks_time.png", width=6, height=2, dpi=300)
 
@@ -63,7 +64,7 @@ pm <- ggplot(memplot, aes(x=posname, y=memdiff.mu, color=pkg, group=pkg)) +
   geom_point(stat='summary', fun.y=sum, size=5) +
   geom_errorbar(aes(ymin = memdiff.mu - memdiff.sd, ymax = memdiff.mu + memdiff.sd), width = 0.1) +
   stat_summary(fun.y=sum, geom="line", size=2) +
-  geom_text(aes(label=pkglabel), nudge_y=1, size=5, family="A", fontface="italic") +
+  geom_text(aes(label=pkglabel), nudge_y=0.5, nudge_x = -0.5, size=5, family="A", fontface="italic") +
   ylab("Free physical memory [GB]") +
   xlab("") +
   facet_wrap(~"Available system memory") +
