@@ -61,7 +61,7 @@ fitness.plot <- ggplot(fitness, aes(x=generation, y=evaluation)) +
   
 results.summary <- tibble(parameter = names(nl@experiment@variables),
                           value = round(nl@simdesign@simoutput$population[nrow(nl@simdesign@simoutput$population), ], digits = 2)) %>% 
-  transmute(value= c(floor(value[1]), value[2:3]))
+  mutate(value=c(floor(value[1]), value[2:3]))
 
 
 fitness.best.table <- tableGrob(results.summary, rows=rep("",nrow(results.summary))) 
