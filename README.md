@@ -1,6 +1,4 @@
-[![DOI](https://zenodo.org/badge/139545394.svg)](https://zenodo.org/badge/latestdoi/139545394)
-
-** IN THE END WE NEED TO UPDATE THE ZENODO BADGE **
+[![DOI](https://zenodo.org/badge/157339028.svg)](https://zenodo.org/badge/latestdoi/157339028)
 
 This repository is designed to store scripts linked to the use case section of Salecker et al. (submitted): The nlrx R package: A next-generation framework for reproducible NetLogo model analyses.
 
