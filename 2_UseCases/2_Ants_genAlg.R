@@ -60,10 +60,11 @@ fitness.plot <- ggplot(fitness, aes(x=generation, y=evaluation)) +
   ylab("evaluation [ticks]")
   
 results.summary <- tibble(parameter = names(nl@experiment@variables),
-                          value = round(nl@simdesign@simoutput$population[nrow(nl@simdesign@simoutput$population), ], digits = 2))
+                          value = round(nl@simdesign@simoutput$population[nrow(nl@simdesign@simoutput$population), ], digits = 2)) %>% 
+  transmute(value= c(floor(value[1]), value[2:3]))
 
 
-fitness.best.table <- tableGrob(results.summary, rows=rep("",nrow(results.summary)))
+fitness.best.table <- tableGrob(results.summary, rows=rep("",nrow(results.summary))) 
 
 #fitness.plot <- fitness.plot + annotation_custom(fitness.best.table, xmin=50, ymin=2000)
 
