@@ -148,11 +148,16 @@ validplot <- ggplot(results.best.agg, aes(x=step, y=runs.finished, color=foodsou
   guides(color=guide_legend(title="foodsource")) +
   #scale_color_jco() +
   scale_color_viridis_d() +
+  guides(color="none") +
   geom_vline(xintercept = max(dplyr::filter(results.best.agg, foodsource=="1")$step), lty=2) +
   geom_vline(xintercept = max(dplyr::filter(results.best.agg, foodsource=="2")$step), lty=2) +
   geom_vline(xintercept = max(dplyr::filter(results.best.agg, foodsource=="3")$step), lty=2) +
   theme_ipsum(base_size = 14, axis_text_size = 14, axis_title_size = 14, strip_text_size = 14) +
+  xlim(0,900) +
   ylab("runs finished [%]") +
+  annotate(geom="text", x=max(dplyr::filter(results.best.agg, foodsource=="1")$step) - 120, y=95, label="source 1") +
+  annotate(geom="text", x=max(dplyr::filter(results.best.agg, foodsource=="2")$step) + 130, y=85, label="source 2") +
+  annotate(geom="text", x=max(dplyr::filter(results.best.agg, foodsource=="3")$step) - 130, y=40, label="source 3") +
   theme(panel.spacing = unit(0.5, "lines"),
         legend.position = "top",
         plot.margin = margin(t = pmarg, r = pmarg, b = pmarg, l = pmarg, unit = "pt"))
