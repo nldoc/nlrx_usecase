@@ -23,7 +23,7 @@ time <- benchmarks %>%
   dplyr::select(pkg, sysname, diff) %>% 
   spread(pkg, diff) %>% 
   mutate_at(c("nlrx", "RNetLogo"), funs(as.numeric(.))) %>% 
-  mutate(nlrx_percent = ((nlrx - RNetLogo) / RNetLogo) * 100)
+  mutate(nlrx_percent = ((RNetLogo - nlrx) / RNetLogo) * 100)
 
 windowsFonts(A = windowsFont("Roboto"))
 
@@ -31,8 +31,9 @@ pt <- ggplot(time, aes(x=0, y=nlrx_percent)) +
   geom_boxplot(fill="#268BD2") +
   coord_flip() +
   theme_classic() +
-  ylab("Execution time difference of nlrx compared to RNetLogo [%]") +
-  facet_wrap(~"Simulation runtime") +
+  ylab("Execution time reduction of nlrx compared to RNetLogo [%]") +
+  xlab("\n") +
+  ggtitle("Simulation runtime") +
   theme(axis.title.y = element_text(color="white"),
         axis.text.y = element_text(color="white"),
         axis.ticks.y = element_blank(),
@@ -40,43 +41,53 @@ pt <- ggplot(time, aes(x=0, y=nlrx_percent)) +
         panel.grid = element_blank(),
         axis.text.x = element_text(size=14, color="black", family="A"),
         axis.title.x = element_text(size=14, color="black", family="A"),
+        title = element_text(size=16, color="black", family="A"),
         strip.text = element_text(size=14, color="black", family="A"),
         strip.background = element_rect(color="black", fill="gray95"),
         plot.margin = margin(0,4,30,2, unit = "pt"))
 
 ggsave(plot=pt, "4_Plots/nlrx_benchmarks_time.png", width=6, height=2, dpi=300)
 
+## Postpro memory:
+benchmarks_meta <- list.files("3_Results/benchmark", pattern = ".txt", full.names = TRUE)
+systemram <- map_dfr(benchmarks_meta, function(x) {
+  xl <- read_lines(x)
+  ram <- tibble(systemram = as.numeric(substring(xl[grep("System RAM", xl)], 13, 14)))
+})
+systemram$sysname <- unique(benchmarks$sysname)
+
 # Postpro memory:
-basemem <- benchmarks %>% filter(pos==1)
-memplot <- benchmarks 
-memplot$basemem <- rep(basemem$mem, each=3) 
-memplot <- memplot %>% mutate(memdiff = mem - basemem)
+mem_nlrx <- benchmarks %>% filter(pkg=="nlrx") %>% select(posname, sysname, mem) %>% rename(mem_nlrx = mem)
+mem_rnet <- benchmarks %>% filter(pkg=="RNetLogo") %>% select(posname, sysname, mem) %>% rename(mem_rnet = mem)
+memplot <- mem_nlrx %>%left_join(mem_rnet) %>% 
+  left_join(systemram) %>% 
+  mutate(nlrx = ((systemram - mem_nlrx) / systemram) * 100,
+         RNetLogo = ((systemram - mem_rnet) / systemram) * 100) %>% 
+  select(-mem_nlrx, -mem_rnet, -systemram) %>% 
+  gather(pkg, ram_p, nlrx, RNetLogo)
 
-## Aggregate across systems:
-memplot <- memplot %>% group_by(pkg, posname) %>% summarize(memdiff.mu = mean(memdiff), memdiff.sd = sd(memdiff))
+memplot$posname <- factor(memplot$posname, 
+                          levels=c("Pre simulation", "Post simulation", "Post gc"),
+                          labels=c("Pre\nsimulation", "Post\nsimulation", "Post\ngc"))
 
-## Add label variable:
-memplot$pkglabel <- ifelse(memplot$posname=="Post gc", memplot$pkg, "")
-
-
-# Plot Memory:
-pm <- ggplot(memplot, aes(x=posname, y=memdiff.mu, color=pkg, group=pkg)) +
-  geom_point(stat='summary', fun.y=sum, size=5) +
-  geom_errorbar(aes(ymin = memdiff.mu - memdiff.sd, ymax = memdiff.mu + memdiff.sd), width = 0.1) +
-  stat_summary(fun.y=sum, geom="line", size=2) +
-  geom_text(aes(label=pkglabel), nudge_y=0.5, nudge_x = -0.5, size=5, family="A", fontface="italic") +
-  ylab("Free physical memory [GB]") +
+pm <- ggplot(memplot, aes(x=posname, y=ram_p, fill=pkg)) +
+  facet_wrap(~pkg, ncol=2) +
+  geom_boxplot() +
+  ylab("System memory in use [%]") +
   xlab("") +
-  facet_wrap(~"Available system memory") +
-  scale_color_solarized() +  
-  guides(color="none") +
+  scale_fill_solarized() +
+  guides(fill="none") +
   theme_classic() +
+  ggtitle("Memory usage") +
   theme(axis.text = element_text(size=14, color="black", family="A"),
         axis.title = element_text(size=14, color="black", family="A"),
+        title = element_text(size=16, color="black", family="A"),
         strip.text = element_text(size=14, color="black", family="A"),
         strip.background = element_rect(color="black", fill="gray95"))
 
-ggsave(plot=pm, "4_Plots/nlrx_benchmarks_memory.png", width=6, height=4, dpi=300)
+
+ggsave(plot=pm, "4_Plots/nlrx_benchmarks_memory.png", width=7, height=4, dpi=300)
+
 
 ### Arrange plots:
 library(gridExtra)
