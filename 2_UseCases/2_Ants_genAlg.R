@@ -146,7 +146,8 @@ results.best.agg <- results.best.agg %>%
 validplot <- ggplot(results.best.agg, aes(x=step, y=runs.finished, color=foodsource)) +
   geom_step(size=1) +
   guides(color=guide_legend(title="foodsource")) +
-  scale_color_jco() +
+  #scale_color_jco() +
+  scale_color_viridis_d() +
   geom_vline(xintercept = max(dplyr::filter(results.best.agg, foodsource=="1")$step), lty=2) +
   geom_vline(xintercept = max(dplyr::filter(results.best.agg, foodsource=="2")$step), lty=2) +
   geom_vline(xintercept = max(dplyr::filter(results.best.agg, foodsource=="3")$step), lty=2) +
@@ -170,7 +171,8 @@ results.best.agg <- results.best.agg %>%
 cumplot <- ggplot(results.best.agg, aes(x=step, y=percentage.eaten, color=factor(seed))) +
   geom_step(size=1) +
   guides(color="none") +
-  scale_color_jco() +
+  #scale_color_jco() +
+  scale_color_viridis_d() +
   ylab("food gathered [%]") +
   geom_vline(aes(xintercept = maxstep, color=factor(seed)), lty=2) +
   theme_ipsum(base_size = 14, axis_text_size = 14, axis_title_size = 14, strip_text_size = 14) +
